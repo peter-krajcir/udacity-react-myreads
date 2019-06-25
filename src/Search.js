@@ -12,7 +12,9 @@ class Search extends Component {
   handleChange = (e) => {
     this.setState({
       search: e.target.value
-    }); 
+    });
+    
+	this.findBooksByText(e.target.value);
   }
 
 // if we already have book in the collection, display correct shelf in the dropdown
@@ -21,9 +23,9 @@ class Search extends Component {
     return (bookAlreadyInShelf.length === 0 ? 'none' : bookAlreadyInShelf[0].shelf);
   }
 
-  handleSubmit = (e) => {
-    e.preventDefault();
-    BooksAPI.search(this.state.search, 20)
+  findBooksByText = (text) => {
+    console.log('API search for', text);
+    BooksAPI.search(text, 20)
     .then(searchBooks => {
       if (searchBooks.items && searchBooks.items.length === 0) {
         this.setState(currentState => ({
@@ -35,6 +37,11 @@ class Search extends Component {
           ({searchBooks: updatedSearchBooks}))
       }
     });
+  }
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+	this.findBooksByText(this.state.search);
   }
   
   changeShelf = (book, newShelf) => {
