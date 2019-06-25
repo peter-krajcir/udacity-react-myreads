@@ -2,10 +2,13 @@ import React, {Component} from 'react'
 import {Link} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI.js'
 import Book from './Book.js'
+import PropTypes from 'prop-types'
 
 class Search extends Component {
   state = {
+    // search Input
   	search: '',
+    // books return from API when searching for them
     searchBooks: []
   }
 
@@ -14,7 +17,9 @@ class Search extends Component {
       search: e.target.value
     });
     
-	this.findBooksByText(e.target.value);
+    // if there's a search string, let's query API by using helper method findBooksByText
+    // otherwise don't display anything
+	(e.target.value === '' ? this.setState({searchBooks: []}) : this.findBooksByText(e.target.value));
   }
 
 // if we already have book in the collection, display correct shelf in the dropdown
@@ -24,15 +29,17 @@ class Search extends Component {
   }
 
   findBooksByText = (text) => {
-    console.log('API search for', text);
     BooksAPI.search(text, 20)
     .then(searchBooks => {
       if (searchBooks.items && searchBooks.items.length === 0) {
+        // 0 books returned from API
         this.setState(currentState => ({
         	searchBooks: []
         }))
       } else {
+        // the data coming from API don't have shelf property, use helper method getCorrectShelf to find the correct value for the property and attach it to the book object
         const updatedSearchBooks = searchBooks.map(book => ({...book, shelf: this.getCorrectShelf(book) }));
+        // assign found books from API with correct shelf information to state and render
         this.setState(currentState =>
           ({searchBooks: updatedSearchBooks}))
       }
@@ -45,6 +52,7 @@ class Search extends Component {
   }
   
   changeShelf = (book, newShelf) => {
+    // using changeShelf from App.js when the user changes the bookshelf
     this.props.onChangeShelf(book, newShelf);
   }
 
@@ -71,6 +79,11 @@ class Search extends Component {
       </div>  
     )
   }
+}
+
+Search.propTypes = {
+  books: PropTypes.array.isRequired,
+  onChangeShelf: PropTypes.func.isRequired
 }
 
 export default Search;

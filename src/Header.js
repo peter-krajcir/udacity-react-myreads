@@ -1,11 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const Header = () => {
+// Simple component to display Header of the application
+const Header = ({title}) => {
 	return (
       <div className="list-books-title">
-          <h1>MyReads</h1>
+          <h1>{title}</h1>
       </div>
     )
+}
+
+Header.propTypes = {
+  title: PropTypes.string.isRequired
 }
 
 export default Header;

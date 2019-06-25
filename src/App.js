@@ -8,20 +8,25 @@ import Search from './Search.js'
 
 class BooksApp extends React.Component {
   state = {
+    // contains all the books from our bookshelf
   	books: [],
+    // flag whether the page was first time loaded - used for displaying Loading data.. label for the initial load
     loaded: false
   };
   
+// loading the data for bookshelfs
   componentDidMount() {
     BooksAPI.getAll() 
     .then((books) => (
     	this.setState((currentState) => ({
         	books,
+          // once the data are loaded, we hide Loading data label
             loaded: true
         }))
     ))
   }
 
+// called from Book.js - to change the shelf for the selected book
   changeShelf = (book, newShelf) => {
     book.shelf = newShelf;
     // if the user selected None in the dropdown, let's remove the book from the bookshelf
@@ -34,9 +39,10 @@ class BooksApp extends React.Component {
           books: [...currentState.books.filter(b=>b.id !== book.id), book]
       }));
     }
+    // let's save the change to backend
     BooksAPI.update(book, newShelf);
   }
-
+// three Bookshelfs, we use arrow filter function to show only the books with corresponding shelf
   render() {
     return (
       <div className="app">
@@ -45,7 +51,7 @@ class BooksApp extends React.Component {
     	)} />
         <Route exact path="/" render={(history) => (
 		  <div className="list-books">
-			<Header />
+			<Header title="MyReads"/>
             <div className="list-books-content">
               {this.state.books.length === 0 && !this.state.loaded ? (<h3>Loading books... Please wait</h3>) : 
               <div>

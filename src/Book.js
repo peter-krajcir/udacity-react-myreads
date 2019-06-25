@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 
+// we use Class Component because we are using dropdown and we want to store that information that is changing based on the user's choice
 class Book extends Component {
-
   constructor(props) {
   	super(props);
+    // initializing state shelf information from the book
 	this.state = { shelf: this.props.book.shelf};
   }
   
@@ -15,6 +16,11 @@ class Book extends Component {
     this.props.onChangeShelf(this.props.book, e.target.value);
   }
   
+/* 
+When there is no imageLinks property, the div's backgroundImage is empty 
+React handles the change of the dropdown
+when there's no authors property, it is not displyed 
+*/
   render() {
     return (
       <div className="book">
@@ -35,6 +41,11 @@ class Book extends Component {
       </div>  
     )
   }
+}
+
+Book.propTypes = {
+  book: PropTypes.object.isRequired,
+  onChangeShelf: PropTypes.func.isRequired
 }
 
 export default Book;
