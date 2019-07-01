@@ -12,7 +12,7 @@ const Bookshelf = ({title, id, books, onChangeShelf}) => {
 	<div className="bookshelf">
     	<h2 className="bookshelf-title">{title}</h2>
     	<div className="bookshelf-books">
-{books.length === 0 ? <h3>No books in this section</h3> :
+		  {books.length === 0 ? <h3>No books in this section</h3> :
     		<ol className="books-grid">
 				{books.map(book => {
                  	return (<li key={book.id}>

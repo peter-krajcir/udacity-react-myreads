@@ -3,6 +3,7 @@ import {Link} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI.js'
 import Book from './Book.js'
 import PropTypes from 'prop-types'
+import {DebounceInput} from 'react-debounce-input';
 
 class Search extends Component {
   state = {
@@ -63,7 +64,8 @@ class Search extends Component {
               <Link to="/" className="close-search">Close</Link>
               <div className="search-books-input-wrapper">
                   <form onSubmit={this.handleSubmit}>
-                      <input type="text" placeholder="Search by title or author" value={this.state.search} onChange={this.handleChange}/>
+    {/* <input type="text" placeholder="Search by title or author" value={this.state.search} onChange={this.handleChange}/> */}
+					<DebounceInput minLength={2} debounceTimeout={300} onChange={this.handleChange} />
                   </form>
               </div>
           </div>

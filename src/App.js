@@ -1,10 +1,11 @@
 import React from 'react'
-import {Route, Link} from 'react-router-dom'
+import {Route, Link, Switch} from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import Header from './Header.js'
 import Bookshelf from './Bookshelf.js'
 import Search from './Search.js'
+import NoMatch from './NoMatch.js'
 
 class BooksApp extends React.Component {
   state = {
@@ -46,26 +47,29 @@ class BooksApp extends React.Component {
   render() {
     return (
       <div className="app">
-        <Route path="/search" render={(history)=> (
-    		<Search onChangeShelf={this.changeShelf} books={this.state.books}/>
-    	)} />
-        <Route exact path="/" render={(history) => (
-		  <div className="list-books">
-			<Header title="MyReads"/>
-            <div className="list-books-content">
-              {this.state.books.length === 0 && !this.state.loaded ? (<h3>Loading books... Please wait</h3>) : 
-              <div>
-                <Bookshelf title="Currently Reading" id="currentlyReading" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "currentlyReading"))}/>
-          		<Bookshelf title="Want to Read" id="wantToRead" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "wantToRead"))}/>
-          		<Bookshelf title="Read" id="read" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "read"))}/>
+       <Switch>
+          <Route path="/search" render={(history)=> (
+              <Search onChangeShelf={this.changeShelf} books={this.state.books}/>
+          )} />
+          <Route exact path="/" render={(history) => (
+            <div className="list-books">
+              <Header title="MyReads"/>
+              <div className="list-books-content">
+                {this.state.books.length === 0 && !this.state.loaded ? (<h3>Loading books... Please wait</h3>) : 
+                <div>
+                  <Bookshelf title="Currently Reading" id="currentlyReading" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "currentlyReading"))}/>
+                  <Bookshelf title="Want to Read" id="wantToRead" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "wantToRead"))}/>
+                  <Bookshelf title="Read" id="read" onChangeShelf={this.changeShelf} books={this.state.books.filter((book) => (book.shelf === "read"))}/>
+                </div>
+              }
               </div>
-			}
-            </div>
-            <div className="open-search">
-          	  <Link to="/search">Add a book</Link>
-            </div>
-          </div>        
-        )} />
+              <div className="open-search">
+                <Link to="/search">Add a book</Link>
+              </div>
+            </div>        
+          )} />
+          <Route component={NoMatch} />
+		</Switch>
       </div>
     )
   }
